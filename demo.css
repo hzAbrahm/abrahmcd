@@ -1,0 +1,216 @@
+/* ===== Variables: colores y fuentes en un solo lugar. El tema oscuro solo las redefine ===== */
+:root {
+  --papel: #f6ecd2;      /* fondo crema, como el papel de la imagen */
+  --tarjeta: #fffaf0;
+  --tinta: #141414;
+  --barra: #141414;      /* barra negra superior */
+  --barra-texto: #f6ecd2;
+  --naranja: #f59a0c;
+  --amarillo: #fbbf24;
+  --azul: #2f9bd6;
+  --titulos: "Permanent Marker", cursive;
+  --texto: "Patrick Hand", system-ui, sans-serif;
+}
+[data-theme="dark"] {
+  --papel: #1d1b18;
+  --tarjeta: #2a2722;
+  --tinta: #f6ecd2;
+  --barra: #000;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 90px; } /* el header fijo no tapa los títulos */
+
+body {
+  margin: 0;
+  font-family: var(--texto);
+  font-size: 1.15rem;
+  line-height: 1.5;
+  color: var(--tinta);
+  /* Manchas de pintura de fondo: gradientes radiales naranja y azul en los bordes */
+  background:
+    radial-gradient(circle at 0% 20%, var(--naranja) 0 80px, transparent 82px),
+    radial-gradient(circle at 100% 60%, var(--azul) 0 90px, transparent 92px),
+    radial-gradient(circle at 0% 90%, var(--azul) 0 60px, transparent 62px),
+    var(--papel);
+  background-attachment: fixed;
+  transition: background-color .3s, color .3s;
+}
+
+h1, h2, h3, .logo { font-family: var(--titulos); font-weight: 400; margin: 0 0 .5rem; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--azul); outline-offset: 2px; } /* foco visible con teclado */
+
+.saltar { position: absolute; left: -999px; }
+.saltar:focus { left: 8px; top: 8px; z-index: 100; background: var(--amarillo); padding: .4rem .8rem; }
+
+/* ===== Header ===== */
+#cabecera {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: .6rem 1.2rem;
+  background: var(--barra); color: var(--barra-texto);
+  border-bottom: 4px solid var(--naranja);
+}
+.logo { font-size: 1.6rem; text-decoration: none; transform: rotate(-2deg); }
+.logo span { color: var(--naranja); }
+
+#menu { display: flex; gap: 1.6rem; }
+#menu a {
+  text-decoration: none; padding: .2rem 0;
+  background: linear-gradient(var(--naranja), var(--naranja)) 0 100% / 0 3px no-repeat; /* subrayado que crece */
+  transition: background-size .25s;
+}
+#menu a:hover, #menu a.activo { background-size: 100% 3px; }
+
+.controles { display: flex; gap: .4rem; }
+.controles button {
+  background: transparent; color: inherit; border: 2px solid transparent;
+  font: inherit; font-size: 1.2rem; cursor: pointer; border-radius: 10px;
+  padding: .25rem .6rem; position: relative; transition: transform .15s, border-color .15s;
+}
+.controles button:hover { border-color: var(--naranja); transform: rotate(-4deg) scale(1.08); }
+#contador {
+  position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px;
+  background: var(--naranja); color: #000; border-radius: 10px; font-size: .8rem;
+}
+#contador.salto { animation: salto .35s; }
+#btn-menu { display: none; }
+
+/* ===== Hero ===== */
+.hero { position: relative; text-align: center; padding: 4rem 1.2rem 3rem; max-width: 800px; margin: 0 auto; }
+.titulo-grande { font-size: clamp(3rem, 12vw, 6rem); line-height: 1; transform: rotate(-2deg); text-shadow: 3px 3px 0 var(--amarillo); }
+.titulo-grande span { color: var(--naranja); }
+.eslogan {
+  display: inline-block; font-family: var(--titulos); font-size: 1.4rem; padding: .3rem 1.2rem;
+  background: linear-gradient(100deg, transparent 0, var(--amarillo) 4% 96%, transparent 100%); /* trazo de marcador */
+  color: #141414; transform: rotate(-1deg);
+}
+/* Postres que flotan suavemente (única animación continua) */
+.flotantes span { position: absolute; font-size: 2.6rem; animation: flotar 4s ease-in-out infinite; }
+.flotantes span:nth-child(1) { left: 4%; top: 30%; }
+.flotantes span:nth-child(2) { right: 6%; top: 12%; animation-delay: -1.3s; }
+.flotantes span:nth-child(3) { right: 12%; bottom: 8%; animation-delay: -2.6s; }
+
+/* ===== Secciones tipo hoja de papel ===== */
+.papel {
+  max-width: 1000px; margin: 2.5rem auto; padding: 1.5rem clamp(1rem, 4vw, 2.5rem);
+  background: var(--tarjeta); border: 3px solid var(--tinta); border-radius: 6px 20px 8px 18px;
+  box-shadow: 8px 8px 0 var(--naranja);
+}
+.papel h2 {
+  display: inline-block; padding: .1rem 1.2rem; color: #141414;
+  background: linear-gradient(100deg, transparent 0, var(--amarillo) 3% 97%, transparent 100%);
+  font-size: 1.8rem;
+}
+.papel h3 { margin-top: 1.2rem; text-decoration: underline wavy var(--azul); text-underline-offset: 6px; }
+
+/* Animación de scroll: .revelar empieza oculta; el JS añade .visible al entrar en pantalla */
+.revelar { opacity: 0; transform: translateY(30px); transition: opacity .6s, transform .6s; }
+.revelar.visible { opacity: 1; transform: none; }
+
+/* ===== Botones ===== */
+.boton, .monto {
+  display: inline-block; font: inherit; font-size: 1.1rem; cursor: pointer; text-decoration: none;
+  padding: .55rem 1.4rem; color: #141414; background: var(--naranja);
+  border: 3px solid #141414; border-radius: 12px; box-shadow: 4px 4px 0 #141414;
+  transition: transform .12s, box-shadow .12s;
+}
+.boton:hover, .monto:hover { transform: translate(-2px, -2px) rotate(-1deg); box-shadow: 6px 6px 0 #141414; }
+.boton:active, .monto:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 #141414; } /* efecto "presionado" */
+.secundario { background: var(--amarillo); }
+.monto[aria-pressed="true"] { background: var(--azul); }
+
+/* ===== Formularios y filtros ===== */
+label { display: block; }
+label > span { display: block; font-size: .95rem; }
+input, select, textarea {
+  width: 100%; font: inherit; padding: .45rem .7rem; color: var(--tinta); background: var(--papel);
+  border: 2px solid var(--tinta); border-radius: 8px;
+}
+.filtros { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: .8rem; align-items: end; margin-bottom: .5rem; }
+.reco, #form-contacto { display: grid; gap: .8rem; margin-top: 1.5rem; }
+.reco .boton { justify-self: start; }
+fieldset { border: 2px dashed var(--tinta); margin: 1rem 0; }
+
+/* ===== Tarjetas de producto ===== */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1.2rem; }
+.producto {
+  display: flex; flex-direction: column; gap: .3rem; padding: 1rem; text-align: center;
+  background: var(--papel); border: 2px solid var(--tinta); border-radius: 14px;
+  animation: aparece .4s both; transition: transform .2s;
+}
+.producto:hover { transform: rotate(-1.5deg) translateY(-4px); }
+.producto .emoji { font-size: 3.6rem; transition: transform .3s; }
+.producto:hover .emoji { transform: scale(1.2) rotate(8deg); } /* el postre "salta" al pasar el cursor */
+.producto h4 { margin: 0; font-family: var(--titulos); font-weight: 400; }
+.etiquetas { font-size: .9rem; opacity: .8; }
+.precio { font-size: 1.3rem; font-weight: bold; margin: 0; }
+.producto .boton { margin-top: auto; }
+
+/* ===== Locales: mapa falso difuminado ===== */
+.mapa { position: relative; min-height: 260px; overflow: hidden; border: 2px solid var(--tinta); border-radius: 12px; }
+.mapa-fondo {
+  position: absolute; inset: -20px; filter: blur(6px); /* blur = desenfoque */
+  background:
+    linear-gradient(90deg, transparent 48%, #fff 48% 52%, transparent 52%) 0 0 / 140px 140px, /* calles verticales */
+    linear-gradient(0deg, transparent 48%, #fff 48% 52%, transparent 52%) 0 0 / 110px 110px,   /* calles horizontales */
+    linear-gradient(35deg, transparent 47%, #ffd37a 47% 53%, transparent 53%),                 /* avenida diagonal */
+    #b9dcb0;
+}
+.pin { position: absolute; left: 58%; top: 42%; width: 28px; height: 28px; background: #e0361f; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
+.mapa-aviso {
+  position: relative; display: grid; place-content: center; min-height: 260px; padding: 1.5rem; text-align: center;
+  background: rgb(0 0 0 / .45); color: #fff; font-size: 1.3rem;
+}
+.redes { display: flex; gap: 1rem; justify-content: center; margin: 0; }
+.redes a { padding: .2rem .8rem; background: var(--amarillo); color: #141414; border-radius: 20px; text-decoration: none; }
+
+footer { text-align: center; padding: 2rem 1rem; background: var(--barra); color: var(--barra-texto); font-family: var(--titulos); }
+footer p { margin: .2rem; }
+
+/* ===== Carrito lateral: se desliza desde la derecha ===== */
+#velo { position: fixed; inset: 0; z-index: 60; background: rgb(0 0 0 / .5); }
+#carrito {
+  position: fixed; top: 0; right: 0; z-index: 70; width: min(380px, 100%); height: 100%;
+  display: flex; flex-direction: column; gap: .6rem; padding: 1rem; overflow-y: auto;
+  background: var(--tarjeta); border-left: 4px solid var(--naranja);
+  transform: translateX(100%); transition: transform .3s;
+}
+#carrito.abierto { transform: none; }
+.carrito-top { display: flex; justify-content: space-between; align-items: center; }
+.carrito-top button { font-size: 1.3rem; background: none; border: 0; color: inherit; cursor: pointer; }
+#lista-carrito { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+#lista-carrito li { display: grid; grid-template-columns: 1fr auto; gap: .2rem .6rem; padding: .6rem; border: 2px solid var(--tinta); border-radius: 10px; }
+.cantidad { display: flex; align-items: center; gap: .4rem; }
+.cantidad button { width: 30px; height: 30px; font: inherit; cursor: pointer; border: 2px solid var(--tinta); border-radius: 50%; background: var(--amarillo); color: #141414; }
+.total { font-size: 1.4rem; margin-top: auto; }
+
+#aviso {
+  position: fixed; left: 50%; bottom: 20px; z-index: 80; padding: .6rem 1.2rem;
+  background: var(--naranja); color: #141414; border: 3px solid #141414; border-radius: 12px;
+  transform: translate(-50%, 150%); transition: transform .3s;
+}
+#aviso.ver { transform: translate(-50%, 0); }
+
+/* ===== Animaciones ===== */
+@keyframes flotar { 50% { transform: translateY(-14px) rotate(6deg); } }
+@keyframes aparece { from { opacity: 0; transform: scale(.9); } }
+@keyframes salto { 50% { transform: scale(1.5); } }
+
+/* ===== Responsive: en pantallas angostas el menú se vuelve desplegable ===== */
+@media (max-width: 800px) {
+  #btn-menu { display: inline-block; }
+  #menu {
+    position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: .8rem;
+    padding: 1rem 1.2rem; background: var(--barra); display: none;
+  }
+  #menu.abierto { display: flex; }
+  .flotantes { display: none; }
+}
+
+/* Respeta a quien pidió "reducir movimiento" en su sistema */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .revelar { opacity: 1; transform: none; }
+}
